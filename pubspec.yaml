@@ -1,0 +1,27 @@
+name: lovecompat
+description: LoveCompat 2.0 - entertainment compatibility app.
+publish_to: "none"
+version: 2.0.0+20
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  crypto: ^3.0.6
+  image_picker: ^1.1.2
+  shared_preferences: ^2.5.3
+  url_launcher: ^6.3.2
+  flutter_launcher_icons: ^0.14.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/lovecompat_icon.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/lovecompat_icon.png
+  remove_alpha_ios: false
