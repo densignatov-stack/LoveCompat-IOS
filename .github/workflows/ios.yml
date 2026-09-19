@@ -35,14 +35,12 @@ jobs:
           s = p.read_text()
 
           s = s.replace(
-              """'Есть и совпадения, и различия.
-Результат находится примерно посередине.'""",
+              """'Есть и совпадения, и различия.Результат находится примерно посередине.'""",
               "'Есть и совпадения, и различия.\\nРезультат находится примерно посередине.'"
           )
 
           s = s.replace(
-              """'There are both similarities and differences.
-The result is around the middle.'""",
+              """'There are both similarities and differences.The result is around the middle.'""",
               "'There are both similarities and differences.\\nThe result is around the middle.'"
           )
 
