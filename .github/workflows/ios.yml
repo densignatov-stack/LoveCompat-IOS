@@ -35,12 +35,14 @@ jobs:
           s = p.read_text()
 
           s = s.replace(
-              "'Есть и совпадения, и различия.\nРезультат находится примерно посередине.'",
+              """'Есть и совпадения, и различия.
+Результат находится примерно посередине.'""",
               "'Есть и совпадения, и различия.\\nРезультат находится примерно посередине.'"
           )
 
           s = s.replace(
-              "'There are both similarities and differences.\nThe result is around the middle.'",
+              """'There are both similarities and differences.
+The result is around the middle.'""",
               "'There are both similarities and differences.\\nThe result is around the middle.'"
           )
 
@@ -49,13 +51,13 @@ jobs:
 
           flutter create . --platforms=ios
 
-      - name: Зависимости
+      - name: Установить зависимости
         run: flutter pub get
 
-      - name: Проверка кода
+      - name: Проверить код
         run: flutter analyze
 
-      - name: Сборка iOS
+      - name: Собрать iOS
         run: flutter build ios --release --no-codesign
 
       - name: Сохранить приложение
