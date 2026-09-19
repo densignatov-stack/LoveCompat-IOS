@@ -1,1 +1,36 @@
+name: Build LoveCompat iOS
 
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Find ZIP
+        run: |
+          ls -la
+          find . -maxdepth 2 -type f -name "*.zip"
+
+      - name: Extract project
+        run: |
+          mkdir project
+          unzip -q LoveCompat-Flutter-2.0-iOS.zip -d project
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Get dependencies
+        working-directory: project/lovecompat_flutter
+        run: flutter pub get
+
+      - name: Build iOS
+        working-directory: project/lovecompat_flutter
+        run: flutter build ios --release --no-codesign
