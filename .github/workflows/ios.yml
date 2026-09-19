@@ -1,36 +1,45 @@
-name: Build LoveCompat iOS
+name: Сборка LoveCompat iOS
 
 on:
-  workflow_dispatch:
   push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build-ios:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout
+      - name: Скачать код
         uses: actions/checkout@v4
 
-      - name: Find ZIP
-        run: |
-          ls -la
-          find . -maxdepth 2 -type f -name "*.zip"
-
-      - name: Extract project
-        run: |
-          mkdir project
-          unzip -q LoveCompat-Flutter-2.0-iOS.zip -d project
-
-      - name: Setup Flutter
+      - name: Установить Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
-      - name: Get dependencies
-        working-directory: project/lovecompat_flutter
+      - name: Проверить Flutter
+        run: flutter --version
+
+      - name: Подготовить Flutter проект
+        run: |
+          mkdir -p lib
+          cp main.dart lib/main.dart
+          flutter create . --platforms=ios
+
+      - name: Установить зависимости
         run: flutter pub get
 
-      - name: Build iOS
-        working-directory: project/lovecompat_flutter
+      - name: Проверить Dart код
+        run: flutter analyze
+
+      - name: Собрать iOS
         run: flutter build ios --release --no-codesign
+
+      - name: Сохранить результат сборки
+        uses: actions/upload-artifact@v4
+        with:
+          name: LoveCompat-iOS
+          path: build/ios/iphoneos/Runner.app
