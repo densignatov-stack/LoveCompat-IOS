@@ -20,25 +20,45 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Проверить Flutter
-        run: flutter --version
-
-      - name: Подготовить Flutter проект
+      - name: Подготовить проект
         run: |
           mkdir -p lib
+          mkdir -p assets
+
           cp main.dart lib/main.dart
+          cp lovecompat_icon.png assets/lovecompat_icon.png
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("lib/main.dart")
+          s = p.read_text()
+
+          s = s.replace(
+              "'Есть и совпадения, и различия.\nРезультат находится примерно посередине.'",
+              "'Есть и совпадения, и различия.\\nРезультат находится примерно посередине.'"
+          )
+
+          s = s.replace(
+              "'There are both similarities and differences.\nThe result is around the middle.'",
+              "'There are both similarities and differences.\\nThe result is around the middle.'"
+          )
+
+          p.write_text(s)
+          PY
+
           flutter create . --platforms=ios
 
-      - name: Установить зависимости
+      - name: Зависимости
         run: flutter pub get
 
-      - name: Проверить Dart код
+      - name: Проверка кода
         run: flutter analyze
 
-      - name: Собрать iOS
+      - name: Сборка iOS
         run: flutter build ios --release --no-codesign
 
-      - name: Сохранить результат сборки
+      - name: Сохранить приложение
         uses: actions/upload-artifact@v4
         with:
           name: LoveCompat-iOS
